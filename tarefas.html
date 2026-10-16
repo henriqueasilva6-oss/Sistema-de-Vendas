@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Controle de Tarefas</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topo-pagina">
+      <a href="index.html" class="btn-encerrar">Encerrar sessão</a>
+    </header>
+
+    <main class="pagina-tarefas">
+      <h1>Cadastro de Tarefas</h1>
+      <form>
+        <div>
+          <label for="tarefa">Tarefa:</label>
+          <input
+            type="text"
+            id="tarefa"
+            name="tarefa"
+            placeholder="Digite a tarefa"
+            required
+          />
+        </div>
+
+        <div>
+          <label for="descricao">Descrição:</label>
+          <input
+            type="text"
+            id="descricao"
+            name="descricao"
+            placeholder="Digite a descrição"
+            required
+          />
+        </div>
+
+        <div>
+          <label for="prazo">Prazo:</label>
+          <input type="date" id="prazo" name="prazo" required />
+        </div>
+
+        <div class="botoes-form">
+          <button type="submit" id="btn-submit">Cadastrar</button>
+          <button
+            type="button"
+            id="btn-cancelar"
+            class="btn-cancelar"
+            style="display: none;"
+          >
+            Cancelar edição
+          </button>
+        </div>
+      </form>
+
+      <section class="lista-tarefas">
+        <h2>Lista de Tarefas</h2>
+
+        <div class="filtro-status">
+          <label for="status-filtro">Filtrar tarefas por status:</label>
+          <select id="status-filtro" name="status-filtro">
+            <option value="todos">Todos</option>
+            <option value="pendente">Pendente</option>
+            <option value="concluido">Concluído</option>
+          </select>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Tarefa</th>
+              <th>Descrição</th>
+              <th>Prazo</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Tarefa 1</td>
+              <td>Descrição 1</td>
+              <td>2022-12-31</td>
+              <td>Pendente</td>
+              <td class="acoes">
+                <button type="button" class="btn-concluir">
+                  Concluir tarefa
+                </button>
+                <button type="button" class="btn-editar">Editar tarefa</button>
+                <button type="button" class="btn-excluir">
+                  Excluir tarefa
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>Tarefa 2</td>
+              <td>Descrição 2</td>
+              <td>2022-12-31</td>
+              <td>Pendente</td>
+              <td class="acoes">
+                <button type="button" class="btn-concluir">
+                  Concluir tarefa
+                </button>
+                <button type="button" class="btn-editar">Editar tarefa</button>
+                <button type="button" class="btn-excluir">
+                  Excluir tarefa
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>Tarefa 3</td>
+              <td>Descrição 3</td>
+              <td>2022-12-31</td>
+              <td>Concluída</td>
+              <td class="acoes">
+                <button type="button" class="btn-concluir">
+                  Concluir tarefa
+                </button>
+                <button type="button" class="btn-editar">Editar tarefa</button>
+                <button type="button" class="btn-excluir">
+                  Excluir tarefa
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <script src="tarefas.js"></script>
+  </body>
+</html>

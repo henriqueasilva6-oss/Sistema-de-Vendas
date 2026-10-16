@@ -1,9 +1,5 @@
-// tarefas.js - Lógica de Controle e Gerenciamento de Tarefas
-
-// Chave utilizada para persistência no localStorage
 const CHAVE_STORAGE = 'tarefas';
 
-// Elementos do DOM
 const form = document.querySelector('form');
 const inputTarefa = document.getElementById('tarefa');
 const inputDescricao = document.getElementById('descricao');
@@ -12,7 +8,6 @@ const btnSubmit = form ? form.querySelector('button[type="submit"]') : null;
 const filtroStatus = document.getElementById('status-filtro');
 const tbody = document.querySelector('table tbody');
 
-// Botão de Cancelar Edição (busca se já existir ou cria dinamicamente)
 let btnCancelar = document.getElementById('btn-cancelar');
 if (!btnCancelar && btnSubmit) {
   btnCancelar = document.createElement('button');
@@ -24,10 +19,8 @@ if (!btnCancelar && btnSubmit) {
   btnSubmit.insertAdjacentElement('afterend', btnCancelar);
 }
 
-// Variável para armazenar o ID da tarefa atualmente em edição
 let idEmEdicao = null;
 
-// Tarefas iniciais padrão (usadas apenas se o localStorage estiver vazio na primeira visita)
 const tarefasIniciais = [
   {
     id: '1',
@@ -52,9 +45,6 @@ const tarefasIniciais = [
   }
 ];
 
-// ---------------------------------------------------------
-// Funções de Armazenamento (LocalStorage)
-// ---------------------------------------------------------
 function obterTarefas() {
   const dados = localStorage.getItem(CHAVE_STORAGE);
   if (dados !== null) {
@@ -66,7 +56,6 @@ function obterTarefas() {
     }
   }
 
-  // Primeiro acesso: grava as tarefas iniciais no localStorage
   salvarTarefas(tarefasIniciais);
   return [...tarefasIniciais];
 }
@@ -75,16 +64,12 @@ function salvarTarefas(tarefas) {
   localStorage.setItem(CHAVE_STORAGE, JSON.stringify(tarefas));
 }
 
-// ---------------------------------------------------------
-// Função para Renderizar Tarefas na Tabela
-// ---------------------------------------------------------
 function renderizarTarefas() {
   if (!tbody) return;
 
   const tarefas = obterTarefas();
   const filtro = filtroStatus ? filtroStatus.value : 'todos';
 
-  // Filtra as tarefas conforme o valor do select
   const tarefasFiltradas = tarefas.filter((tarefa) => {
     if (filtro === 'pendente') {
       return tarefa.status.toLowerCase().includes('pendente');
@@ -92,7 +77,7 @@ function renderizarTarefas() {
     if (filtro === 'concluido') {
       return tarefa.status.toLowerCase().includes('conclu');
     }
-    return true; // 'todos'
+    return true;
   });
 
   tbody.innerHTML = '';
@@ -112,7 +97,6 @@ function renderizarTarefas() {
     const tr = document.createElement('tr');
     const estaConcluida = tarefa.status.toLowerCase().includes('conclu');
 
-    // Classe de estilo para o badge de status
     const classeBadge = estaConcluida ? 'badge-status badge-concluida' : 'badge-status badge-pendente';
 
     tr.innerHTML = `
@@ -137,7 +121,6 @@ function renderizarTarefas() {
   });
 }
 
-// Prevenção contra injeção de HTML
 function escapeHTML(texto) {
   if (!texto) return '';
   return String(texto)
@@ -148,9 +131,6 @@ function escapeHTML(texto) {
     .replace(/'/g, '&#039;');
 }
 
-// ---------------------------------------------------------
-// Manipulação do Formulário (Cadastrar / Atualizar)
-// ---------------------------------------------------------
 if (form) {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -167,7 +147,6 @@ if (form) {
     const tarefas = obterTarefas();
 
     if (idEmEdicao !== null) {
-      // Atualizar tarefa existente
       const index = tarefas.findIndex((t) => t.id === idEmEdicao);
       if (index !== -1) {
         tarefas[index].tarefa = tarefaTexto;
@@ -176,7 +155,6 @@ if (form) {
       }
       cancelarEdicao();
     } else {
-      // Cadastrar nova tarefa
       const novaTarefa = {
         id: Date.now().toString(),
         tarefa: tarefaTexto,
@@ -193,9 +171,6 @@ if (form) {
   });
 }
 
-// ---------------------------------------------------------
-// Modo de Edição
-// ---------------------------------------------------------
 function iniciarEdicao(id) {
   const tarefas = obterTarefas();
   const tarefa = tarefas.find((t) => t.id === id);
@@ -226,9 +201,6 @@ if (btnCancelar) {
   btnCancelar.addEventListener('click', cancelarEdicao);
 }
 
-// ---------------------------------------------------------
-// Concluir ou Reabrir Tarefa
-// ---------------------------------------------------------
 function alternarStatusTarefa(id) {
   const tarefas = obterTarefas();
   const tarefa = tarefas.find((t) => t.id === id);
@@ -244,9 +216,6 @@ function alternarStatusTarefa(id) {
   renderizarTarefas();
 }
 
-// ---------------------------------------------------------
-// Excluir Tarefa
-// ---------------------------------------------------------
 function excluirTarefa(id) {
   const tarefas = obterTarefas();
   const tarefa = tarefas.find((t) => t.id === id);
@@ -258,7 +227,6 @@ function excluirTarefa(id) {
   const novasTarefas = tarefas.filter((t) => t.id !== id);
   salvarTarefas(novasTarefas);
 
-  // Se a tarefa excluída era a que estava em edição, cancela a edição
   if (idEmEdicao === id) {
     cancelarEdicao();
   }
@@ -266,9 +234,6 @@ function excluirTarefa(id) {
   renderizarTarefas();
 }
 
-// ---------------------------------------------------------
-// Delegação de Eventos dos Botões da Tabela
-// ---------------------------------------------------------
 if (tbody) {
   tbody.addEventListener('click', (e) => {
     const btn = e.target.closest('button');
@@ -287,21 +252,14 @@ if (tbody) {
   });
 }
 
-// ---------------------------------------------------------
-// Filtro por Status
-// ---------------------------------------------------------
 if (filtroStatus) {
   filtroStatus.addEventListener('change', () => {
     renderizarTarefas();
   });
 }
 
-// ---------------------------------------------------------
-// Inicialização
-// ---------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
   renderizarTarefas();
 });
 
-// Renderização imediata caso o DOM já esteja pronto
 renderizarTarefas();
